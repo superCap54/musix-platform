@@ -1,0 +1,7 @@
+ffmpeg/
+changes/
+sitemaps/
+upload/
+assets/import/
+*.env
+*.env
