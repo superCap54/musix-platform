@@ -74,7 +74,6 @@ function loadPage($page_url = '', $data = array(), $set_lang = true) {
         return (isset($config[$m[1]])) ? $config[$m[1]] : '';
     }, $page_content);
 
-    
     return $page_content;
 }
 

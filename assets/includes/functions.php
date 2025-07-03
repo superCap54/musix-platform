@@ -390,6 +390,7 @@ function LoadAdminPage($page_url = '', $data = array(), $set_lang = true) {
                     }, $page_content);
                 }else{
                     $object_to_replace = "{{" . $key . "}}";
+
                     $page_content      = str_replace($object_to_replace, $replace, $page_content);
                 }
             }

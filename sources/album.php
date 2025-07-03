@@ -1,4 +1,4 @@
-<?php 
+<?php
 if (empty($path['options'][1])) {
 	header("Location: $site_url/404");
 	exit();

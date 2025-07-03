@@ -40,7 +40,7 @@
 											<select id="age" name="age" class="form-control">
 							                    <option value="0">Not selected</option>
 							                    <?php
-							                    for ($i=1; $i < 100; $i++) { 
+							                    for ($i=1; $i < 100; $i++) {
 							                        ?>
 							                        <option value="<?php echo $i;?>" <?php echo ($music->userData->age == $i) ? 'selected': '';?>><?php echo $i;?></option>
 							                        <?php
@@ -139,14 +139,14 @@
 </div>
 
 <script>
-$(document).ready(function() { 
-    var options = { 
+$(document).ready(function() {
+    var options = {
     	url: "{{CONFIG ajax_url}}/user/general?hash_id=" + getHashID(),
         beforeSubmit:  function () {
         	$('#output-general-errors').removeClass("alert-success").addClass('alert-danger');
         	$('#output-general-errors').empty();
         	$("#btn-general-submit").text("{{LANG Please wait..}}");
-        }, 
+        },
         success: function (data) {
         	$("#btn-general-submit").text("{{LANG Save}}");
         	if (data.status == 200) {
@@ -158,9 +158,9 @@ $(document).ready(function() {
         	} else if (data.status == 400) {
         		var errros = data.errors.join("<br>");
         		$('#output-general-errors').html(errros);
-        	} 
+        	}
         }
-    }; 
-    $('#general-form').ajaxForm(options); 
-}); 
+    };
+    $('#general-form').ajaxForm(options);
+});
 </script>

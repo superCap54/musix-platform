@@ -1,11 +1,11 @@
 <?php
 runPlugin("OnSettingsPage");
 if (IS_LOGGED == false) {
-	header("Location: $site_url/discover");
+	header("Location: $site_url");
 	exit();
 }
 if (empty($path['options'][1])) {
-	header("Location: $site_url/discover");
+	header("Location: $site_url");
 	exit();
 }
 $settings_page = 'general';

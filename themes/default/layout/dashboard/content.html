@@ -1,132 +1,361 @@
-<div class="ma_page_content">
-	<div class="ma_pc_inner">
-		<div class="text-center banner_header dashboard">
-				<div class="circle-1"></div>
-				<div class="circle-2"></div>
-				<div class="position-relative">
-					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M13,3V9H21V3M13,21H21V11H13M3,21H11V15H3M3,13H11V3H3V13Z"></path></svg>
-					<h3>{{LANG Dashboard}}</h3>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Musix - Music Platform</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+	<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+	<script>tailwind.config={theme:{extend:{colors:{primary:'#00b4ff',secondary:'#64ffda'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+	<style>
+		:where([class^="ri-"])::before { content: "\f3c2"; }
+		body {
+			font-family: 'Inter', sans-serif;
+			background-color: #0f0f0f;
+			color: #e0e0e0;
+		}
+		h1, h2, h3, h4, h5, h6 {
+			font-family: 'Space Grotesk', sans-serif;
+		}
+		.card {
+			background: rgba(26, 26, 26, 0.8);
+			border: 1px solid rgba(255, 255, 255, 0.05);
+			transition: all 0.3s ease;
+			position: relative;
+		}
+		.card:hover {
+			box-shadow: 0 0 15px rgba(0, 180, 255, 0.3);
+			border: 1px solid rgba(0, 180, 255, 0.2);
+		}
+		.metric-value {
+			font-family: 'Space Grotesk', sans-serif;
+		}
+		.glow-effect {
+			position: relative;
+		}
+		.glow-effect::after {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			border-radius: inherit;
+			box-shadow: 0 0 15px rgba(0, 180, 255, 0);
+			transition: box-shadow 0.3s ease;
+			pointer-events: none;
+		}
+		.glow-effect:hover::after {
+			box-shadow: 0 0 15px rgba(0, 180, 255, 0.5);
+		}
+		.chart-container {
+			background: rgba(26, 26, 26, 0.5);
+			border: 1px solid rgba(255, 255, 255, 0.05);
+			transition: all 0.3s ease;
+		}
+		.chart-container:hover {
+			border: 1px solid rgba(0, 180, 255, 0.2);
+		}
+		.table-row {
+			transition: all 0.2s ease;
+			border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+		}
+		.table-row:hover {
+			background: rgba(26, 26, 26, 0.8);
+			box-shadow: 0 0 10px rgba(0, 180, 255, 0.2);
+		}
+		input[type="text"], input[type="search"], select {
+			background: rgba(26, 26, 26, 0.8);
+			border: 1px solid rgba(255, 255, 255, 0.1);
+			color: #e0e0e0;
+			transition: all 0.3s ease;
+		}
+		input[type="text"]:focus, input[type="search"]:focus, select:focus {
+			border-color: #00b4ff;
+			box-shadow: 0 0 0 2px rgba(0, 180, 255, 0.2);
+			outline: none;
+		}
+		button {
+			transition: all 0.2s ease;
+		}
+		button:hover {
+			transform: translateY(-1px);
+		}
+		button:active {
+			transform: translateY(1px);
+		}
+		.custom-switch input {
+			opacity: 0;
+			width: 0;
+			height: 0;
+		}
+		input:checked + .switch-slider {
+			background-color: #00b4ff;
+		}
+		input:checked + .switch-slider:before {
+			transform: translateX(22px);
+		}
+		.waveform-bg {
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			opacity: 0.05;
+			pointer-events: none;
+			background-image: url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='wavePattern' patternUnits='userSpaceOnUse' width='100' height='30' patternTransform='scale(1) rotate(0)'%3E%3Cpath d='M0 15 Q 12.5 5, 25 15 T 50 15 T 75 15 T 100 15' stroke='%2300b4ff' fill='none' stroke-width='0.5'/%3E%3Cpath d='M0 15 Q 12.5 25, 25 15 T 50 15 T 75 15 T 100 15' stroke='%2364ffda' fill='none' stroke-width='0.5'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23wavePattern)'/%3E%3C/svg%3E");
+		}
+		#prevBtn, #nextBtn {
+			background: #3b82f6;
+			color: white;
+			border: none;
+			padding: 8px 16px;
+			border-radius: 4px;
+			cursor: pointer;
+		}
+		#prevBtn:disabled, #nextBtn:disabled {
+			background: #64748b;
+			cursor: not-allowed;
+		}
+	</style>
+</head>
+<body class="min-h-screen">
+<main class="ma_page_content p-5">
+	<!-- Summary Cards -->
+	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+		<!-- Total Plays Card -->
+		<div class="card rounded-lg p-6 glow-effect">
+			<div class="flex justify-between items-start">
+				<div>
+					<h3 class="text-gray-400 text-sm font-medium">{{LANG Total Plays}}</h3>
+					<p class="metric-value text-white text-3xl font-semibold mt-1"><?php echo $data['dashboardData']['views']; ?></p>
+				</div>
+				<div class="w-10 h-10 rounded-full bg-[rgba(0,180,255,0.1)] flex items-center justify-center text-primary">
+					<i class="ri-play-circle-line text-xl"></i>
 				</div>
 			</div>
-		
-		<div class="container">
-			
-			
-			<div class="ma_dashboard">
-				<div class="row dashboard_small_stats">
-					<div class="col-md-4">
-						<div class="small_stat songs">
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M21,3V15.5A3.5,3.5 0 0,1 17.5,19A3.5,3.5 0 0,1 14,15.5A3.5,3.5 0 0,1 17.5,12C18.04,12 18.55,12.12 19,12.34V6.47L9,8.6V17.5A3.5,3.5 0 0,1 5.5,21A3.5,3.5 0 0,1 2,17.5A3.5,3.5 0 0,1 5.5,14C6.04,14 6.55,14.12 7,14.34V6L21,3Z"></path></svg>
-							<h2>{{LANG Total Songs}}</h2>
-							<p>{{TOTAL_SONGS}}</p>
+		</div>
+		<!-- Total Earnings Card -->
+		<div class="card rounded-lg p-6 glow-effect">
+			<div class="flex justify-between items-start">
+				<div>
+					<h3 class="text-gray-400 text-sm font-medium">{{LANG Total Earned}}</h3>
+					<p class="metric-value text-white text-3xl font-semibold mt-1">$ <?php echo $data['dashboardData']['earnings']; ?></p>
+				</div>
+				<div class="w-10 h-10 rounded-full bg-[rgba(100,255,218,0.1)] flex items-center justify-center text-[#64ffda]">
+					<i class="ri-money-dollar-circle-line text-xl"></i>
+				</div>
+			</div>
+		</div>
+		<!-- Active Songs Card -->
+		<div class="card rounded-lg p-6 glow-effect">
+			<div class="flex justify-between items-start">
+				<div>
+					<h3 class="text-gray-400 text-sm font-medium">{{LANG Total Songs}}</h3>
+					<p class="metric-value text-white text-3xl font-semibold mt-1"><?php echo $data['dashboardData']['activeSong']; ?></p>
+				</div>
+				<div class="w-10 h-10 rounded-full bg-[rgba(255,0,255,0.1)] flex items-center justify-center text-[#ff00ff]">
+					<i class="ri-music-2-line text-xl"></i>
+				</div>
+			</div>
+		</div>
+		<!-- Countries Reached Card -->
+		<div class="card rounded-lg p-6 glow-effect">
+			<div class="flex justify-between items-start">
+				<div>
+					<h3 class="text-gray-400 text-sm font-medium">{{LANG country}}</h3>
+					<p class="metric-value text-white text-3xl font-semibold mt-1"><?php echo $data['dashboardData']['countriesReached']; ?></p>
+				</div>
+				<div class="w-10 h-10 rounded-full bg-[rgba(255,122,0,0.1)] flex items-center justify-center text-[#ff7a00]">
+					<i class="ri-global-line text-xl"></i>
+				</div>
+			</div>
+		</div>
+	</div>
+	<?php if($data['monthlyData']){ ?>
+	<section class="mb-8">
+		<div class="mb-8 flex justify-between items-center">
+			<h2 class="text-white text-2xl font-medium">{{LANG Dashboard Plane Title2}}</h2>
+		</div>
+		<!-- 卡片容器 -->
+		<div class="relative">
+			<div class="performance-grid-container overflow-x-auto">
+				<div class="performance-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 min-w-max">
+					<?php foreach($data['monthlyData'] as $month){ ?>
+					<div class="card backdrop-blur-sm border border-gray-800 rounded-lg p-4 min-w-[200px] m-1">
+						<div class="text-sm text-gray-400 mb-3"><?php echo $month['month']; ?></div>
+						<div class="space-y-3">
+							<div class="flex items-center justify-between">
+								<div class="flex items-center space-x-2">
+									<div class="w-4 h-4 flex items-center justify-center">
+										<i class="ri-play-circle-line text-primary text-sm"></i>
+									</div>
+									<span class="text-sm text-gray-300">Plays</span>
+								</div>
+								<span class="font-semibold"><?php echo $month['views']; ?></span>
+							</div>
+							<div class="flex items-center justify-between">
+								<div class="flex items-center space-x-2">
+									<div class="w-4 h-4 flex items-center justify-center">
+										<i class="ri-money-dollar-circle-line text-secondary text-sm"></i>
+									</div>
+									<span class="text-sm text-gray-300">Earnings</span>
+								</div>
+								<span class="font-semibold">$<?php echo $month['earnings']; ?></span>
+							</div>
+						</div>
+						<div class="mt-3 flex items-center text-green-400 text-xs">
+							<i class="ri-arrow-up-line mr-1"></i>
+							+5.2%
 						</div>
 					</div>
-					<div class="col-md-4">
-						<div class="small_stat plays">
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M10,16.5V7.5L16,12M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"></path></svg>
-							<h2>{{LANG Total Plays}}</h2>
-							<p>{{TOTAL_PLAYS}}</p>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="small_stat downs">
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,17L17,12H14V8H10V12H7L12,17Z"></path></svg>
-							<h2>{{LANG Total Downloads}}</h2>
-							<p>{{TOTAL_DOWNLOADS}}</p>
-						</div>
+					<?php } ?>
+				</div>
+			</div>
+		</div>
+	</section>
+	<?php } ?>
+
+	<?php if($data['songsDataList']){ ?>
+	<!-- Filter Controls -->
+	<div class="mb-8 flex justify-between items-center">
+		<h2 class="text-white text-2xl font-medium">{{LANG Filter Title}}</h2>
+	</div>
+	<div class="mb-8 p-4 bg-[#1a1a1a] rounded-lg border border-[rgba(255,255,255,0.05)]">
+		<div class="flex flex-wrap items-end gap-4 mb-8">
+			<div class="flex-1 min-w-[200px]">
+				<label class="block text-sm text-gray-400 mb-2">{{LANG Platform}}</label>
+				<div class="relative">
+					<select class="w-full h-10 bg-[rgba(26,26,26,0.8)] border border-[rgba(255,255,255,0.1)] rounded-button px-4 text-white appearance-none pr-8">
+						<option value="all">All Platforms</option>
+						<option value="youtube">YouTube</option>
+						<option value="tiktok">TikTok</option>
+						<option value="facebook">Facebook & Ins</option>
+					</select>
+					<div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+						<i class="ri-arrow-down-s-line text-gray-400"></i>
 					</div>
 				</div>
-				
-				<div class="content">
-					<canvas id="today_chart" height="100"></canvas>
+			</div>
+			<div class="flex-1 min-w-[200px]">
+				<label class="block text-sm text-gray-400 mb-2">{{LANG song}}</label>
+				<div class="relative">
+					<input type="search" placeholder="Search by song title..." class="w-full h-10 bg-[rgba(26,26,26,0.8)] border border-[rgba(255,255,255,0.1)] rounded-button px-4 text-white pl-10">
+					<div class="absolute inset-y-0 left-0 flex items-center pl-2 pointer-events-none">
+						<i class="ri-search-line text-gray-400"></i>
+					</div>
 				</div>
-				
-				<div class="row">
-					<div class="col-md-4">
-						<div class="content">
-							<div class="dash_stat_title">{{LANG Most played songs}}</div>
-							<ul class="list-unstyled mb-0 short_track_stats">
-								{{MOST_PLAYED_SONGS}}
-							</ul>
-						</div>
+			</div>
+			<div class="flex-1 min-w-[240px]">
+				<label class="block text-sm text-gray-400 mb-2">{{LANG date}}</label>
+				<div class="relative">
+					<select class="w-full bg-[rgba(26,26,26,0.8)] border border-[rgba(255,255,255,0.1)] rounded-button px-4 py-2 text-white appearance-none pr-8">
+						<option value="all">All Month</option>
+						<option value="January">January</option>
+						<option value="February">February</option>
+						<option value="March">March</option>
+						<option value="April">April</option>
+						<option value="May">May</option>
+						<option value="June">June</option>
+						<option value="July">July</option>
+						<option value="August">August</option>
+						<option value="September">September</option>
+						<option value="October">October</option>
+						<option value="November">November</option>
+						<option value="December">December</option>
+					</select>
+					<div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+						<i class="ri-arrow-down-s-line text-gray-400"></i>
 					</div>
-					<div class="col-md-4">
-						<div class="content">
-							<div class="dash_stat_title">{{LANG Most commented songs}}</div>
-							<ul class="list-unstyled mb-0 short_track_stats">
-								{{MOST_COMMENTED_SONG}}
-							</ul>
+				</div>
+			</div>
+			<button class="h-10 bg-primary hover:bg-opacity-90 text-white px-8 rounded-button flex items-center justify-center whitespace-nowrap">
+				<i class="ri-search-line mr-2"></i>
+				{{LANG search}}
+			</button>
+		</div>
+		<!-- Song Data Table -->
+		<div class="bg-[#1a1a1a] rounded-lg border border-[rgba(255,255,255,0.05)] mb-8">
+			<div class="p-4 border-b border-[rgba(255,255,255,0.05)]">
+				<h3 class="text-white text-lg font-medium">{{LANG Filter Title}}</h3>
+			</div>
+			<div class="overflow-x-auto">
+				<table class="w-full">
+					<thead>
+					<tr class="text-left text-gray-400 text-sm">
+						<th class="p-4 whitespace-nowrap">Song</th>
+						<th class="p-4 whitespace-nowrap">Platform</th>
+						<th class="p-4 whitespace-nowrap">Promotion Period</th>
+						<th class="p-4 whitespace-nowrap">Total Plays</th>
+						<th class="p-4 whitespace-nowrap">Top Countries</th>
+						<th class="p-4 whitespace-nowrap">Earnings</th>
+					</tr>
+					</thead>
+					<tbody>
+					<?php foreach($data['songsDataList'] as $index => $songsDataItem){ ?>
+					<tr class="table-row" data-index="<?php echo $index; ?>" style="display:<?php if($index < 5){ echo 'table-row';}else{ echo 'none';} ?>">
+						<td class="p-4">
+							<div class="flex items-center">
+								<div class="w-10 h-10 rounded bg-[#2a2a2a] flex items-center justify-center mr-3">
+									<img src="<?php echo $songsDataItem['imgSrc']; ?>" class="w-full h-full object-cover" alt="<?php echo $songsDataItem['title']; ?>">
+								</div>
+								<div>
+									<p class="text-white font-medium"><?php echo $songsDataItem['title']; ?></p>
+								</div>
+							</div>
+						</td>
+						<td class="p-4">
+							<div class="flex items-center">
+								<?php if($songsDataItem['icon'] != ''){ ?>
+								<div class="w-6 h-6 flex items-center justify-center mr-2 text-[#FF0000]">
+									<i class="ri-{{$songsDataItem['icon']}}-fill"></i>
+								</div>
+								<?php } ?>
+								<span class="text-white"><?php echo $songsDataItem['platform']; ?></span>
+							</div>
+						</td>
+						<td class="p-4 text-gray-300"><?php echo $songsDataItem['date']; ?></td>
+						<td class="p-4 text-white font-medium"><?php echo $songsDataItem['views']; ?></td>
+						<td class="p-4 text-white font-medium"><?php echo $songsDataItem['topCountry']; ?></td>
+						<td class="p-4 font-medium text-green-400">$<?php echo $songsDataItem['earns']; ?></td>
+					</tr>
+					<?php } ?>
+					</tbody>
+				</table>
+			</div>
+			<div class="p-4 border-t border-[rgba(255,255,255,0.05)] flex justify-between items-center">
+				<div class="text-sm text-gray-400" id="pageInfo">Showing 1 of 5 songs</div>
+				<div class="flex space-x-2">
+					<button id="prevBtn" disabled>{{LANG Prev Page}}</button>
+					<button id="nextBtn">{{LANG Next Page}}</button>
+				</div>
+			</div>
+		</div>
+		<div class="chart-container rounded-lg p-4 mb-8">
+			<div class="flex justify-between items-center mb-4">
+				<h3 class="text-white text-lg font-medium">{{LANG Top Countries Chart}}</h3>
+			</div>
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+				<div id="countryChart" class="w-full h-64"></div>
+				<div class="grid grid-cols-1 gap-3">
+					<?php foreach($data['countryList'] as $index => $countryItem){ ?>
+					<div class="flex items-center p-3 bg-[rgba(26,26,26,0.5)] rounded-lg">
+						<div class="w-8 h-8 flex items-center justify-center mr-3">
+							<i class="ri-flag-line text-[{{$countryItem['color']}}]"></i>
 						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="content">
-							<div class="dash_stat_title">{{LANG Most liked songs}}</div>
-							<ul class="list-unstyled mb-0 short_track_stats">
-								{{MOST_LIKED_SONGS}}
-							</ul>
-						</div>
-					</div>
-					<div class="col-md-12">
-						<div class="content">
-							<div class="dash_stat_title">{{LANG Most downloaded songs}}</div>
-							<ul class="list-unstyled mb-0 short_track_stats">
-								{{MOST_DOWNLOADED_SONGS}}
-							</ul>
-						</div>
-					</div>
-					<?php if($music->config->artist_sell == 'on'){?>
-					<div class="col-md-12">
-						<hr>
-						<div class="row dashboard_small_stats">
-							<div class="col-md-4">
-								<div class="small_stat sales">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M5,6H23V18H5V6M14,9A3,3 0 0,1 17,12A3,3 0 0,1 14,15A3,3 0 0,1 11,12A3,3 0 0,1 14,9M9,8A2,2 0 0,1 7,10V14A2,2 0 0,1 9,16H19A2,2 0 0,1 21,14V10A2,2 0 0,1 19,8H9M1,10H3V20H19V22H1V10Z"></path></svg>
-									<h2>{{LANG Total Sales}}</h2>
-									<p>{{CONFIG currency_symbol}}{{TOTAL_SALES}}</p>
-								</div>
+						<div class="flex-grow">
+							<div class="flex justify-between">
+								<span class="text-white"><?php echo $countryItem['countryName']; ?></span>
+								<span class="text-white font-medium"><?php echo $countryItem['value']; ?></span>
 							</div>
-							<div class="col-md-4">
-								<div class="small_stat mnthsale">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M9,10V12H7V10H9M13,10V12H11V10H13M17,10V12H15V10H17M19,3A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5C3.89,21 3,20.1 3,19V5A2,2 0 0,1 5,3H6V1H8V3H16V1H18V3H19M19,19V8H5V19H19M9,14V16H7V14H9M13,14V16H11V14H13M17,14V16H15V14H17Z"></path></svg>
-									<h2>{{LANG Total Sales This Month}}</h2>
-									<p>{{CONFIG currency_symbol}}{{TOTAL_SALES_THIS_WEEK}}</p>
-								</div>
+							<div class="w-full bg-[rgba(255,255,255,0.1)] rounded-full h-1.5 mt-2">
+								<div class="bg-[<?php echo $countryItem['color']; ?>] h-1.5 rounded-full" style="width: 100%"></div>
 							</div>
-							<div class="col-md-4">
-								<div class="small_stat todsale">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M7,10H12V15H7M19,19H5V8H19M19,3H18V1H16V3H8V1H6V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3Z"></path></svg>
-									<h2>{{LANG Total Sales Today}}</h2>
-									<p>{{CONFIG currency_symbol}}{{TOTAL_SALES_TODAY}}</p>
-								</div>
-							</div>
-							<div class="col-md-12"><br></div>
-							<div class="col-md-4">
-								<div class="small_stat todsale">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M7,10H12V15H7M19,19H5V8H19M19,3H18V1H16V3H8V1H6V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3Z"></path></svg>
-									<h2>{{LANG total_songs_sales}}</h2>
-									<p>{{CONFIG currency_symbol}}{{TOTAL_SONGS_PURCHAES}}</p>
-								</div>
-							</div>
-							<div class="col-md-4">
-								<div class="small_stat sales">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M7,10H12V15H7M19,19H5V8H19M19,3H18V1H16V3H8V1H6V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3Z"></path></svg>
-									<h2>{{LANG total_tickets_sales}}</h2>
-									<p>{{CONFIG currency_symbol}}{{TOTAL_TICKETS_PURCHAES}}</p>
-								</div>
-							</div>
-							<div class="col-md-4">
-								<div class="small_stat mnthsale">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M7,10H12V15H7M19,19H5V8H19M19,3H18V1H16V3H8V1H6V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3Z"></path></svg>
-									<h2>{{LANG total_products_sales}}</h2>
-									<p>{{CONFIG currency_symbol}}{{TOTAL_PRODUCTS_PURCHAES}}</p>
-								</div>
-							</div>
-						</div>
-						<div class="content">
-							<div class="dash_stat_title">{{LANG Recent sales}}</div>
-							<ul class="list-unstyled mb-0 short_track_stats">
-								{{RECENT_SALES}}
-							</ul>
 						</div>
 					</div>
 					<?php } ?>
@@ -134,93 +363,217 @@
 			</div>
 		</div>
 	</div>
-</div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
-<script>
-// Today Live Line Chart
-var ctx = document.getElementById('today_chart').getContext('2d');
-Chart.defaults.global.defaultFontColor = '#fff';
-var today_chart = new Chart(ctx, {
-// The type of chart we want to create
-type: 'line',
+	<?php } ?>
+	<div class="mb-8">
+		<div class="mb-8 flex justify-between items-center">
+			<h2 class="text-white text-2xl font-medium">{{LANG Song}}</h2>
+		</div>
+		<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-8">
+			<?php foreach($data['songsList'] as $index => $songItem){ ?>
+			<div class="group relative bg-[rgba(26,26,26,0.8)] backdrop-blur-sm border border-[rgba(255,255,255,0.05)] rounded-lg overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:border-[rgba(0,180,255,0.2)] hover:shadow-[0_0_15px_rgba(0,180,255,0.2)]">
+				<div class="relative aspect-square">
+					<div class="absolute inset-0 bg-gradient-to-b from-transparent to-[rgba(0,0,0,0.8)] z-10"></div>
+					<img src="<?php echo $songItem['imgSrc']; ?>" class="w-full h-full object-cover" alt="<?php echo $songItem['title']; ?>">
+					<a href="<?php echo $songItem['audioSrc']; ?>" target="_blank">
+						<div class="absolute inset-0 bg-[rgba(0,180,255,0.1)] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-20">
+							<i class="ri-play-circle-line text-4xl text-white"></i>
+						</div>
+					</a>
+				</div>
+				<div class="p-4">
+					<h4 class="text-white font-medium mb-1"><?php echo $songItem['title']; ?></h4>
+					<p class="text-gray-400 text-sm mb-3"><?php echo $songItem['isrc']; ?></p>
+					<div class="flex items-center gap-2 mb-3">
+						<div class="w-6 h-6 flex items-center justify-center text-[#000000] bg-white rounded">
+							<i class="ri-tiktok-fill text-sm"></i>
+						</div>
+						<div class="w-6 h-6 flex items-center justify-center text-[#FF0000] bg-[rgba(255,0,0,0.1)] rounded">
+							<i class="ri-youtube-fill text-sm"></i>
+						</div>
+						<div class="w-6 h-6 flex items-center justify-center text-[#FA57C1] bg-[rgba(250,87,193,0.1)] rounded">
+							<i class="ri-instagram-fill text-sm"></i>
+						</div>
+						<div class="w-6 h-6 flex items-center justify-center text-[#00b4ff] bg-[rgba(250,87,193,0.1)] rounded">
+							<i class="ri-facebook-fill text-sm"></i>
+						</div>
+					</div>
+					<div class="flex justify-between items-center">
+						<span class="text-gray-400 text-xs"></span>
+						<a href="{{$songItem['audioSrc']}}" download="<?php echo $songItem['isrc']; ?>-<?php echo $songItem['title']; ?>.<?php echo $songItem['fileExtension']; ?>">
+							<button class="bg-primary hover:bg-opacity-90 text-white text-sm px-4 py-1.5 rounded-button flex items-center whitespace-nowrap">
+								<i class="ri-rocket-line mr-1"></i>
+								{{LANG download}}
+							</button>
+						</a>
+					</div>
+				</div>
+			</div>
+			<?php } ?>
+		</div>
+	</div>
+</main>
+<footer class="bg-[#1a1a1a] border-t border-[rgba(255,255,255,0.05)] py-4" style="margin-left: 240px;">
+	<div class="container mx-auto px-4">
 
-// The data for our dataset
-data: {
-	labels: {{THIS_MONTH}},
-	datasets: [{
-		label: "{{LANG Plays}}",
-		borderColor: '#536fd7',
-		backgroundColor: '#536fd7',
-		fill: false,
-		data: {{PLAYS_THIS_MONTH}},
-		pointRadius: 5,
-		pointHoverRadius: 5,
-	},{
-		label: "{{LANG Likes}}",
-		borderColor: '#4caf50',
-		backgroundColor: '#4caf50',
-		fill: false,
-		data: {{LIKES_THIS_MONTH}},
-		pointRadius: 5,
-		pointHoverRadius: 5,
-	},{
-		label: "{{LANG Downloads}}",
-		borderColor: '#ff6873',
-		backgroundColor: '#ff6873',
-		fill: false,
-		data: {{DOWNLOADS_THIS_MONTH}},
-		pointRadius: 5,
-		pointHoverRadius: 5,
-	},
-<?php if($music->config->artist_sell == 'on'){?>
-	{
-		label: "{{LANG Sales}}",
-		borderColor: '#dc1d53',
-		backgroundColor: '#dc1d53',
-		fill: false,
-		data: {{SALES_THIS_MONTH}},
-		pointRadius: 5,
-		pointHoverRadius: 5,
-	}
-<?php } ?>
-	]
-},
+		<div class="flex flex-col md:flex-row justify-between items-center">
+			<div class="flex items-center mb-4 md:mb-0">
+				<span class="text-primary text-lg font-['Pacifico']">logo</span>
+				<span class="text-gray-400 text-sm ml-2">2025 Musix Promotion Platform</span>
+			</div>
 
-// Configuration options go here
-options: {
-	responsive: true,
-	tooltips: {
-		mode: 'index',
-		intersect: false,
-	},
-	hover: {
-		mode: 'nearest',
-		intersect: true
-	},
-	legend: {
-		position: 'bottom',
-		labels: {
-			// This more specific font property overrides the global property
-			fontColor: '#d2d2d2'
+			<div class="flex space-x-4">
+				<a class="lang_select dropup dropdown-toggle" data-toggle="modal" data-target="#select-language"><?php echo ucfirst($_SESSION['lang']); ?></a>
+				<?php if ($music->about_page == 1) { ?>
+				<a href="{{LINK terms/about}}" data-load="terms/about" class="text-gray-400 hover:text-white" target="_blank">{{LANG About Us}}</a> •
+				<?php } ?>
+				<?php if ($music->terms_of_use_page == 1) { ?>
+				<a href="{{LINK terms/terms}}" data-load="terms/terms" class="text-gray-400 hover:text-white" target="_blank">{{LANG Terms}}</a> •
+				<?php } ?>
+				<a href="{{LINK contact}}" data-load="contact" class="text-gray-400 hover:text-white" target="_blank">{{LANG Contact}}</a> •
+				<?php if ($music->privacy_policy_page == 1) { ?>
+				<a href="{{LINK terms/privacy}}" data-load="terms/privacy" class="text-gray-400 hover:text-white" target="_blank">{{LANG Privacy Policy}}</a> •
+				<?php } ?>
+			</div>
+		</div>
+	</div>
+</footer>
+<script id="dateRangeSelector">
+	document.addEventListener('DOMContentLoaded', function() {
+		const languageBtn = document.getElementById('languageBtn');
+		const languageDropdown = document.getElementById('languageDropdown');
+		const currentLang = document.getElementById('currentLang');
+		const langOptions = document.querySelectorAll('.lang-option');
+		const checkIcons = document.querySelectorAll('.lang-option .ri-check-line');
+
+		function updateLanguageUI(lang) {
+			currentLang.textContent = '{{strtoupper(app()->getLocale())}}';
+			checkIcons.forEach(icon => icon.style.opacity = "0");
+			const selectedOption = document.querySelector(`.lang-option[data-lang="${lang}"] .ri-check-line`);
+			if (selectedOption) {
+				selectedOption.style.opacity = "1";
+			}
 		}
-	},
-	scales: {
-		xAxes: [{
-			display: true,
-			gridLines: {
-				display: true,
-				color: "#333"
+		languageBtn.addEventListener('click', function() {
+			languageDropdown.classList.toggle('hidden');
+			setTimeout(() => {
+				if (!languageDropdown.classList.contains('hidden')) {
+					languageDropdown.classList.remove('opacity-0', 'translate-y-1');
+				} else {
+					languageDropdown.classList.add('opacity-0', 'translate-y-1');
+				}
+			}, 0);
+		});
+		langOptions.forEach(option => {
+			option.addEventListener('click', function() {
+				const lang = this.getAttribute('data-lang');
+				updateLanguageUI(lang);
+				languageDropdown.classList.add('hidden');
+			});
+		});
+		document.addEventListener('click', function(e) {
+			if (!languageBtn.contains(e.target) && !languageDropdown.contains(e.target)) {
+				languageDropdown.classList.add('hidden');
 			}
-		}],
-		yAxes: [{
-			display: true,
-			gridLines: {
-				display: true,
-				color: "#333"
-			}
-		}]
-	}
-}
-});
-
+		});
+		updateLanguageUI('{{app()->getLocale()}}');
+	});
 </script>
+<script id="chartsInitialization">
+	document.addEventListener('DOMContentLoaded', function() {
+		// 国家分布图
+		const countryChart = echarts.init(document.getElementById('countryChart'));
+		const countryOption = {
+			animation: false,
+			tooltip: {
+				trigger: 'item',
+				backgroundColor: 'rgba(255, 255, 255, 0.8)',
+				textStyle: {
+					color: '#1f2937'
+				}
+			},
+			series: [
+				{
+					name: 'Country Distribution',
+					type: 'pie',
+					radius: ['40%', '70%'],
+					itemStyle: {
+						borderRadius: 8,
+						borderColor: '#0f0f0f',
+						borderWidth: 2
+					},
+					label: {
+						show: false
+					},
+					emphasis: {
+						itemStyle: {
+							shadowBlur: 10,
+							shadowOffsetX: 0,
+							shadowColor: 'rgba(0, 0, 0, 0.5)'
+						}
+					},
+					data: [
+						<?php foreach($data['countryList'] as $index => $countryItem){ ?>
+		{ value: <?php echo $countryItem['value']; ?>, name: "<?php echo $countryItem['countryName']; ?>", itemStyle: { color: "<?php echo $countryItem['color']; ?>" } },
+						<?php } ?>
+	]
+	}
+	]
+	};
+		countryChart.setOption(countryOption);
+		window.addEventListener('resize', function() {
+			playsChart.resize();
+			earningsChart.resize();
+			countryChart.resize();
+		});
+	});
+</script>
+
+{{--数据翻页--}}
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		const prevBtn = document.getElementById('prevBtn');
+		const nextBtn = document.getElementById('nextBtn');
+		if (prevBtn && nextBtn) {
+			const rows = document.querySelectorAll('.table-row');
+			const pageInfoElement = document.getElementById('pageInfo');
+			const totalRows = rows.length;
+			const perPage = 5;
+			let currentPage = 1;
+			const totalPages = Math.ceil(totalRows / perPage);
+			// 初始化显示
+			updateDisplay();
+			// 上一页按钮
+			document.getElementById('prevBtn').addEventListener('click', function() {
+				if (currentPage > 1) {
+					currentPage--;
+					updateDisplay();
+				}
+			});
+			// 下一页按钮
+			document.getElementById('nextBtn').addEventListener('click', function() {
+				console.log(1111)
+				if (currentPage < totalPages) {
+					currentPage++;
+					updateDisplay();
+				}
+			});
+			function updateDisplay() {
+				// 计算显示范围
+				const start = (currentPage - 1) * perPage;
+				const end = start + perPage;
+				// 更新行显示状态
+				rows.forEach((row, index) => {
+					row.style.display = (index >= start && index < end) ? 'table-row' : 'none';
+				});
+				pageInfoElement.textContent = `Showing ${start + 1}-${Math.min(end, totalRows)} of ${totalRows}`;
+				// 更新按钮状态
+				document.getElementById('prevBtn').disabled = currentPage === 1;
+				document.getElementById('nextBtn').disabled = currentPage === totalPages;
+			}
+		} else {
+			console.error('分页按钮元素未找到');
+		}
+	});
+</script>
+</body>
+</html>

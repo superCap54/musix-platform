@@ -75,6 +75,7 @@ $data['records'] = $records;
 $data['active_category'] = $category;
 $data['current_tag'] = $current_tag;
 
+
 $music->site_title = lang("Blogs");
 $music->site_description = $music->config->description;
 $music->site_content = loadPage("blogs/content", $data);

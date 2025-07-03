@@ -1,6 +1,6 @@
-<?php 
+<?php
 if (IS_LOGGED == true) {
-	header("Location: $site_url/feed");
+	header("Location: $site_url/dashboard");
 	exit();
 }
 
